@@ -22,7 +22,9 @@
 MPU6050 sensor;
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
-
+float X_angle,Y_angle;
+int minVal = 265;
+int maxVal = 402;
 //PID
 double kp = 5, ki = 1, kd = 0.01, input = 0, output = 0, setpoint = 0; // modify kp, ki and kd for optimal performance
 PID myPID(&input, &output, &setpoint, kp, ki, kd, DIRECT);             // Creates a PID controller
@@ -30,11 +32,16 @@ PID myPID(&input, &output, &setpoint, kp, ki, kd, DIRECT);             // Create
 void calc_pid(int *FR,int *FL,int *BR,int *BL)                         // function to apply PID and correct wheel speeds
 {
     sensor.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);                   // get accelerometer and gyroscope values from MPU6050
-    // ------------------PID stuff goes here------------------------------
+    int xAng = map(ax, minVal, maxVal, -90, 90);
+    int yAng = map(ay, minVal, maxVal, -90, 90);
+    int zAng = map(az, minVal, maxVal, -90, 90);
+    X_angle = RAD_TO_DEG * (atan2(-yAng, -zAng) + PI);
+    Y_angle = RAD_TO_DEG * (atan2(-xAng, -zAng) + PI);
+    
     return;
 }
 
-int Speed_FR = 0, Speed_FL = 0, Speed_BR = 0, Speed_Bl = 0,Speed_inp=0;
+int Speed_FR = 0, Speed_FL = 0, Speed_BR = 0, Speed_BL = 0,Speed_inp=0;
 void setup() 
 {
     pinMode(FR_FWD, OUTPUT);
