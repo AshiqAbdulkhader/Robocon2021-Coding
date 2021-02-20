@@ -37,9 +37,31 @@ void calc_pid(int *FR,int *FL,int *BR,int *BL)                         // functi
     int zAng = map(az, minVal, maxVal, -90, 90);
     X_angle = RAD_TO_DEG * (atan2(-yAng, -zAng) + PI);
     Y_angle = RAD_TO_DEG * (atan2(-xAng, -zAng) + PI);
-    input=X_angle;
-    myPID.Compute();
+    if (X_angle == 0)
     return;
+    else
+    {
+        input = X_angle;
+        myPID.Compute();
+        if(X_angle>0)  // right deviation
+        {
+            if((*FR+output)<255)
+                *FR+=output;
+            else
+                *BR+=output;
+            return;
+        }
+        else
+        if(X_angle<0)   // left deviation
+        {
+            if ((*FL + output) < 255)
+                *FL += output;
+            else
+                *BL += output;
+            return;
+        }
+
+    }
 }
 
 int Speed_FR = 0, Speed_FL = 0, Speed_BR = 0, Speed_BL = 0,Speed_inp=0;
