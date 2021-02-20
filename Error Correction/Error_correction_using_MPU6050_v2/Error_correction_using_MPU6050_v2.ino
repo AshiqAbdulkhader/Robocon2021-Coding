@@ -37,7 +37,8 @@ void calc_pid(int *FR,int *FL,int *BR,int *BL)                         // functi
     int zAng = map(az, minVal, maxVal, -90, 90);
     X_angle = RAD_TO_DEG * (atan2(-yAng, -zAng) + PI);
     Y_angle = RAD_TO_DEG * (atan2(-xAng, -zAng) + PI);
-    
+    input=X_angle;
+    myPID.compute();
     return;
 }
 
