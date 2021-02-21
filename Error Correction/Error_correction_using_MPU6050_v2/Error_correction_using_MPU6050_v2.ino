@@ -84,7 +84,6 @@ void setup()
     pinMode(EN_BR, OUTPUT);
     pinMode(EN_BL, OUTPUT);
 
-    Wire.begin();
     Serial.begin(9600);
     myPID.SetMode(AUTOMATIC);                                           // PID mode to AUTOMATIC
     Serial.println("Initializing the sensor");
