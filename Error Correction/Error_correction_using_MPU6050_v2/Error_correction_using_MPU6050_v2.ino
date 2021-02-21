@@ -1,7 +1,7 @@
 // Include libraries
 #include <PID_v1.h>
 #include <MPU6050.h>
-#include<wire.h>
+#include <stdlib.h>
 
 // Pin configuration
 
@@ -45,6 +45,8 @@ void calc_pid(int *FR,int *FL,int *BR,int *BL)                         // functi
         myPID.Compute();
         if(X_angle>0)  // right deviation
         {
+            input = X_angle;
+            myPID.Compute();
             if((*FR+output)<255)
                 *FR+=output;
             else
@@ -54,6 +56,8 @@ void calc_pid(int *FR,int *FL,int *BR,int *BL)                         // functi
         else
         if(X_angle<0)   // left deviation
         {
+            input = abs(X_angle);
+            myPID.Compute();
             if ((*FL + output) < 255)
                 *FL += output;
             else
