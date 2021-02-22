@@ -19,7 +19,7 @@ from simple_pid import PID
 # HELPER FUNCTIONS
 
 def RAD_TO_DEG(angle):
-    return (angle * math.pi)/180
+    return (angle * 180)/math.pi
 
 def translate(value, leftMin, leftMax, rightMin, rightMax):
     # Figure out how 'wide' each range is
@@ -59,14 +59,14 @@ maxVal = 402
 kp = 5
 ki = 1
 kd = 0.01
-Setpoint = 0; 
+Setpoint = 0;
 myPID = PID(kp, ki, kd, Setpoint) # Creates a PID controller
 Input = 0
 Output = myPID(Input)
 
 
 def calc_pid(FR, FL, BR, BL): # function to apply PID and correct wheel speeds
-    print("Enter the 6 MPU outputs (3 accel, 3 gyro)")
+    print("\nEnter the 6 MPU outputs (3 accel, 3 gyro)")
     ax, ay, az, gx, gy, gz = map(float, input().split()) # get accelerometer and gyroscope values from MPU6050
     # change_limits = interp1d([minVal, maxVal], [-90, 90])
     xAng = translate(ax, minVal, maxVal, -90, 90)
@@ -74,6 +74,10 @@ def calc_pid(FR, FL, BR, BL): # function to apply PID and correct wheel speeds
     zAng = translate(az, minVal, maxVal, -90, 90)
     X_angle = RAD_TO_DEG(math.atan2(-yAng, -zAng) + math.pi)
     Y_angle = RAD_TO_DEG(math.atan2(-xAng, -zAng) + math.pi)
+    X_angle =translate(X_angle, 0, 360, -180, 180)
+    Y_angle =translate(Y_angle, 0, 360, -180, 180)
+    print("X_angle: ", X_angle)
+    print("Y_angle: ", Y_angle)
     myPID.output_limits = (-90, 90)
     if X_angle == 0:
         return
@@ -101,7 +105,7 @@ Speed_BR = 0
 Speed_BL = 0
 Speed_inp = 0
 
-def setup(): 
+def setup():
     # myPID.SetMode(AUTOMATIC) # PID mode to AUTOMATIC
     print("Initializing the sensor")
     # Serial.println(sensor.testConnection() ? "Successfully Connected" : "Connection failed")
@@ -110,7 +114,7 @@ def setup():
 
 def loop():
     while(True):
-        print("Enter the current speed:")
+        print("\nEnter the current speed:")
         Speed_inp = int(input())
         #Speed_FR = Serial.read();
         #Speed_FL = Serial.read();
